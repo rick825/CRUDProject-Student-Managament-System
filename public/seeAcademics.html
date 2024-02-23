@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   
+     <!-- header section -->
+     <header id="nav">
+        <div class="nav">
+           <div class="navleft">
+              <div class="navlogo">
+                 <a href=""><h2>Student Management System</h2></a>
+              </div>
+           </div>
+           <div class="navright">
+              <div class="navlist">
+               <ul>
+                <li class="navitem"><a href="" class="navlink"><img  src="https://img.icons8.com/fluency-systems-regular/48/settings--v1.png" alt="settings--v1"/></a></li>
+                <li class="navitem"><a href="" class="navlink"><img  src="https://img.icons8.com/ios/50/blogger.png" alt="blogger"/></a></li>
+                <li class="navitem"><a href="" class="navlink"><img  src="https://img.icons8.com/windows/32/000000/user-male-circle.png" alt="user-male-circle"/></a></li>
+               </ul>
+              </div>
+           </div>
+        </div>
+       </header>
+    <!-- end header section -->
+
+
+    <!-- main section -->
+    <section id="main">
+     <div class="main">
+        <div class="main-top">
+            <div class="main-top-head">
+             <h2>Add Academics Record</h2>
+            </div>
+            <div class="main-top-form">
+                <div class="main-forms">
+                    <form action="/addAcademics" method="post" class="form1 form">
+                      <div class="formdiv">
+                      <label for="studentID">Student ID:</label>
+                      <input type="number" placeholder="Enter Student ID" id="studentid" name="studentID"><br>
+                      <label for="grades">Grade:</label>
+                      <input type="number" placeholder="Enter Student Grade" id="StudentAge" name="grades"><br>
+                      <label for="subjects">Subjects: (comma-separated):</label>
+                      <input type="text" id="subjects" name="subjects" placeholder="Enter Student Subjects" required><br>
+                    </div>
+                     <button class="submit" >Submit</button><br>
+                    </form>
+                  </div>
+                  <div class="main-button">
+                    <button><a href="/">See Student Records</a></button>
+                    <button><a href="/cocurricular">See Cocurricular</a></button>
+                   </div>
+            </div>
+        </div>
+        <div class="main-bot">
+         <div class="main-table">
+            <table>
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Age</th>
+                      <th>Grade</th>
+                      <th>Subjects</th>
+                      <th>Action</th>
+                      <th>See Profile</th>
+                  </tr>
+              </thead>
+              <tbody id="studentBody">
+                  <!-- <tr>
+                      <td>10001</td>
+                      <td>John Doe</td>
+                      <td>30</td>
+                      <td>IT Department</td>
+                      <td>$50,000</td>
+                  </tr> -->
+                  
+              </tbody>
+          </table>
+          </div>
+        </div>
+     </div>
+    </section>
+    <!-- end main section -->
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+    fetch('/getAcademics')
+      .then(response => response.json())
+      .then(data => {
+        const studentBody = document.getElementById("studentBody");
+
+        data.students.forEach(student => {
+          const academic = data.academics.find(academic => academic.studentID === student.studentID);
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${student.studentID}</td>
+            <td>${student.name}</td>
+            <td>${student.age}</td>
+            <td>${academic ? academic.grades: 'No Grades Found'}</td>
+            <td>${academic ? academic.subjects.join(','):'No Subject Found'}</td>
+            <td><a href="/">Delete</a></td>
+            <td><a href="/profile">See Profile</a></td>
+          `;
+          studentBody.appendChild(row);
+        });
+      })
+      .catch(error => console.error("Error fetching student records:", error));
+  });
+</script>
+</body>
+</html>
